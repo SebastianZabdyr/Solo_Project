@@ -1,144 +1,41 @@
+'use strict';
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 
-import {settings, select, classNames} from './settings.js';
-import Product from './components/Product.js';
-import Cart from './components/Cart.js';
-import Booking from './components/Booking.js';
-import Home from './components/Home.js';
+console.log('wd');
+var ctx = document.getElementById('myChart').getContext('2d');
 
-const app = {
-
-  initBooking: function(){
-    const thisApp = this;
-
-    const bookingWrapper = document.querySelector(select.containerOf.booking);
-
-    //new Booking (bookingWrapper);
-
-    thisApp.initBooking = new Booking (bookingWrapper);
+var chart = new Chart(ctx, {
+  // 1
+  type: 'bar',
+  data: {
+    // 2
+    labels: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10'],
+    // 3
+    datasets: [{
+      // 4
+      label: 'Signups',
+      // 5
+      backgroundColor: '#8DBEC8',
+      borderColor: '#8DBEC8',
+      // 6
+      data: [ 52, 51, 41, 94, 26, 6, 72, 9, 21, 88 ],
+    },
+    {
+      label: 'FTD',
+      backgroundColor: '#F29E4E',
+      borderColor: '#F29E4E',
+      data: [ 6, 72, 1, 0, 47, 11, 50, 44, 63, 76 ],
+    },
+    {
+      label: 'Earned',
+      backgroundColor: '#71B374',
+      borderColor: '#71B374',
+      data: [ 59, 49, 68, 90, 67, 41, 13, 38, 48, 48 ],
+      // 7
+      hidden: true,
+    }]
   },
+});
 
-  initPages: function(){
-    const thisApp = this;
-
-    thisApp.pages = document.querySelector(select.containerOf.pages).children;
-    thisApp.navLinks = document.querySelectorAll(select.nav.links);
-
-    const idFromHash = window.location.hash.replace('#/', '');
-
-    let pageMatchingHash = thisApp.pages[0].id;
-    /*
-    for(let page of thisApp.pages){
-      if (page.id == idFromHash){
-        pageMatchingHash = page.id;
-        break;
-      }
-    }
-*/
-    thisApp.activatePage(pageMatchingHash);
-
-    for(let link of thisApp.navLinks){
-      link.addEventListener('click', function(event){
-        const clickedElement = this;
-        event.preventDefault();
-
-        /* get page id from href attrib */
-        const id = clickedElement.getAttribute('href').replace('#', '');
-
-        /* run thisApp.activatePage with that id */
-        thisApp.activatePage(id);
-
-        /* change url hash */
-        window.location.hash = '#/' + id;
-      });
-    }
-  },
-
-  activatePage: function(pageId){
-    const thisApp = this;
-
-    /////// add class active to matchng pages , remove trom non matchng
-    for(let page of thisApp.pages){
-      page.classList.toggle(classNames.pages.active, page.id == pageId);
-    }
-
-    /////// add class active to matchng links , remove trom non matchng
-    for(let link of thisApp.navLinks){
-      link.classList.toggle(
-        classNames.nav.active,
-        link.getAttribute('href') == '#' + pageId
-      );
-    }
-  },
-
-  initData: function(){
-    const thisApp = this;
-
-    thisApp.data = {};
-    const url = settings.db.url + '/' + settings.db.product;
-
-    fetch(url)
-      .then(function(rawResponse){
-        return rawResponse.json();
-      })
-      .then(function(parsedResponse){
-
-        /* save parsedResponse as thisApp.data.products */
-        thisApp.data.products = parsedResponse;
-
-        /* execute initMenu method*/
-        thisApp.initMenu();
-
-      });
-
-    console.log('thisApp.data', JSON.stringify(thisApp.data));
-  },
-
-  initMenu: function(){
-    const thisApp = this;
-
-    //console.log('thisApp.data', thisApp.data);
-
-    for(let productData in thisApp.data.products){
-      new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
-    }
-  },
-
-  initCart: function(){
-    const thisApp = this;
-
-    const cartElem = document.querySelector(select.containerOf.cart);
-    thisApp.cart = new Cart(cartElem);
-
-    thisApp.prodctList = document.querySelector(select.containerOf.menu);
-
-    thisApp.prodctList.addEventListener('add-to-cart', function(event){
-      app.cart.add(event.detail.product);
-    });
-  },
-
-  initHome: function (){
-    const thisApp = this;
-
-    const homeContainer = document.querySelector(select.containerOf.home);
-    console.log(homeContainer);
-    thisApp.home = new Home(homeContainer);
-  },
-
-  init: function(){
-    const thisApp = this;
-    console.log('*** App starting ***');
-    console.log('thisApp:', thisApp);
-    console.log('classNames:', classNames);
-    console.log('settings:', settings);
-    //console.log('templates:', templates);
-
-    thisApp.initPages();
-    thisApp.initData();
-    thisApp.initCart();
-    thisApp.initBooking();
-    thisApp.initHome();
-  },
-
-};
-
-app.init();
+console.log('wd');
